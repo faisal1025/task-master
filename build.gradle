@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'org.airtribe'
+version = '1.0-SNAPSHOT'
+description = "this is task management application for assignment"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    // Spring Security for authentication/authorization
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // Validation (Jakarta Bean Validation / Hibernate Validator)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // JSON Web Token (JJWT) for token creation and validation
+    implementation("io.jsonwebtoken:jjwt-api:0.13.0")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
+    // Add H2 so an embedded datasource is available at runtime for development
+    runtimeOnly 'com.h2database:h2'
+    // Add MySQL JDBC driver so Hibernate can load MySQL dialect and connect at runtime
+//    runtimeOnly 'mysql:mysql-connector-j'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+}
+
+test {
+    useJUnitPlatform()
+}

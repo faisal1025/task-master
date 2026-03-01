@@ -1,0 +1,18 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: "TaskMaster - A Collaborative Task Tracking System"
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  # NOTE: replace this secret with a secure value for production. Must be at least 32 bytes for HS256.
+  secret: "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  expiration-ms: 3600000
+
+# legacy/alternate key used by util.JwtTokenUtil
+jwt-secret-key: "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
