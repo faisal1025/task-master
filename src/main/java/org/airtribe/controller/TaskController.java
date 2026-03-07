@@ -5,6 +5,7 @@ import org.airtribe.dto.task.request.TaskUpdateRequest;
 import org.airtribe.dto.task.response.TaskResponse;
 import org.airtribe.service.TaskManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ public class TaskController {
     @Autowired
     private TaskManagementService taskService;
 
+
     @PostMapping("/")
     public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskCreationRequest taskRequest) {
         TaskResponse taskResponse = taskService.createTask(taskRequest);
@@ -29,8 +31,14 @@ public class TaskController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<TaskResponse>> listTasks() {
-        List<TaskResponse> tasks = taskService.getAllTasks();
+    public ResponseEntity<List<TaskResponse>> listTasks(@RequestParam(value = "page", defaultValue = "0") int pageNo,
+                                                        @RequestParam(value = "size", defaultValue = "10") int pageSize,
+                                                        @RequestParam(value = "sort", defaultValue = "dueDate") String sortBy,
+                                                        @RequestParam(value = "dir", defaultValue = "asc") String dir) {
+        if(pageNo < 0) pageNo = 0;
+        if(pageSize >= 200) pageSize = 10;
+        Sort.Direction direction = dir.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        List<TaskResponse> tasks = taskService.getAllTasks(pageNo, pageSize, direction, sortBy);
         return ResponseEntity.ok(tasks);
     }
 
@@ -47,9 +55,17 @@ public class TaskController {
         return ResponseEntity.ok(updated);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/assign/")
+    public ResponseEntity<TaskResponse> assignTask(@PathVariable("id") Long taskId,
+                                       @RequestParam("user_id") Long userId) {
+        TaskResponse response = taskService.assignTask(taskId, userId);
+        return ResponseEntity.ok(response);
     }
 }

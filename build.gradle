@@ -24,9 +24,9 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
     // Add H2 so an embedded datasource is available at runtime for development
-    runtimeOnly 'com.h2database:h2'
+//    runtimeOnly 'com.h2database:h2'
     // Add MySQL JDBC driver so Hibernate can load MySQL dialect and connect at runtime
-//    runtimeOnly 'mysql:mysql-connector-j'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 

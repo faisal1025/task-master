@@ -1,13 +1,13 @@
 package org.airtribe.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.engine.internal.Cascade;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "app_user")
+@Table(name="user")
 public class User extends BaseEntity {
 
     @Column(nullable = false, unique = true)
@@ -20,12 +20,42 @@ public class User extends BaseEntity {
     private String fullName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, columnDefinition = "varchar(20)")
     private Role role = Role.USER;
 
     private boolean enabled = false; // email verification
 
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Task> createdTasks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userAssigned")
+    private List<Task> assignedTasks = new ArrayList<>();
+
+    @PreRemove
+    private void preRemove() {
+        for (Task t: assignedTasks){
+            if(t.getCreator() == null || !this.equals(t.getCreator())){
+                t.setUserAssigned(null);
+            }
+        }
+    }
+
     public User() {}
+
+    public List<Task> getCreatedTasks() {
+        return createdTasks;
+    }
+
+    public void setCreatedTasks(List<Task> createdTasks) {
+        this.createdTasks = createdTasks;
+    }
+
+    public List<Task> getAssignedTasks() {
+        return assignedTasks;
+    }
+
+    public void setAssignedTasks(List<Task> assignedTasks) {
+        this.assignedTasks = assignedTasks;
+    }
 
     public String getEmail() {
         return email;
@@ -67,3 +97,4 @@ public class User extends BaseEntity {
         this.enabled = enabled;
     }
 }
+

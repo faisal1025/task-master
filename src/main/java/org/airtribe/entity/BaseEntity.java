@@ -2,6 +2,7 @@ package org.airtribe.entity;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -20,6 +21,12 @@ public abstract class BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    // lastModifiedBy is an association to User; add proper JPA mapping so Hibernate treats it as an association
+//    @LastModifiedBy
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "last_modified_by_id")
+//    private User lastModifiedBy;
 
     public BaseEntity() {
 

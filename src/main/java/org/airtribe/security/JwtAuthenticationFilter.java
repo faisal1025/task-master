@@ -18,11 +18,15 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
+
     private JwtUtil jwtUtil;
 
-    @Autowired
     private UserDetailsService userDetailsService;
+
+    public JwtAuthenticationFilter(@Autowired JwtUtil jwtUtil, @Autowired UserDetailsService userDetailService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -40,6 +44,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // invalid token - proceed without authentication
             }
         }
+
+
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);

@@ -10,8 +10,17 @@ public class TaskUpdateRequest {
     private String description;
     private LocalDateTime dueDate;
     private Status status;
+    private Long assignedUser;
 
     public TaskUpdateRequest() {}
+
+    public Long getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(Long assignedUser) {
+        this.assignedUser = assignedUser;
+    }
 
     public String getTitle() {
         return title;

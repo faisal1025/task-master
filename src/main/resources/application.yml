@@ -2,9 +2,20 @@ server:
   port: 9090
 
 spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/taskMaster?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: "TaskMaster - A Collaborative Task Tracking System"
   jpa:
+    # Let Hibernate auto-detect the dialect based on the JDBC metadata. Explicitly setting
+    # `database-platform` to a class that isn't present in the Hibernate version on the
+    # classpath (for example `org.hibernate.dialect.MySQL8Dialect`) causes
+    # ClassLoadingException: Unable to load class [...]. Remove or change the value
+    # if you need to force a specific dialect.
+    # database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     hibernate:
       ddl-auto: update
@@ -13,6 +24,3 @@ jwt:
   # NOTE: replace this secret with a secure value for production. Must be at least 32 bytes for HS256.
   secret: "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
   expiration-ms: 3600000
-
-# legacy/alternate key used by util.JwtTokenUtil
-jwt-secret-key: "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
